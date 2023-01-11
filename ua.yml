@@ -1,0 +1,72 @@
+id: io.github.mrwexor.ua
+runtime: org.freedesktop.Platform
+runtime-version: &runtime-version '22.08'
+sdk: org.freedesktop.Sdk
+command: ua-wrapper
+
+add-build-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: .
+    version: *runtime-version
+    no-autodownload: true
+    autodelete: false
+
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: .
+    version: *runtime-version
+    no-autodownload: true
+    autodelete: false
+
+#cleanup:
+  #- *.a
+  #- *.la
+
+finish-args:
+  - --socket=pulseaudio
+  - --socket=x11
+  - --share=ipc
+  - --share=network
+  - --device=dri
+  - --filesystem=~/ua
+  - --filesystem=xdg-run/pipewire-0
+
+modules:
+  - shared-modules/SDL2/SDL2-2.26.1-with-libdecor.json
+  - shared-modules/lua5.4/lua-5.4.json
+
+  - name: libopenal
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://openal-soft.org/openal-releases/openal-soft-1.22.2.tar.bz2
+        sha256: ae94cc95cda76b7cc6e92e38c2531af82148e76d3d88ce996e2928a1ea7c3d20
+
+  - name: ua
+    #build-options:
+      #append-ld-library-path: /app/lib
+      #env:
+        #LDFLAGS = -L$(MINGW)/lib/
+        #CFLAGS: -I/app/include/
+    buildsystem: simple
+    build-commands:
+      #- cd src; make nix
+      - install -Dm744 UA /app
+      - install -Dm744 ua-wrapper /app/bin
+      #- fc-cache -fsv ||:;
+    sources:
+      - type: git
+        url: https://github.com/MrWexor/OpenAssault.git
+      - type: patch
+        path: lua.patch
+      - type: file
+        path: UA
+      - type: script
+        dest-filename: ua-wrapper
+        commands:
+          - cd ~/ua/ua
+          - ln -s /app/UA ~/ua/ua/UA
+          - exec ~/ua/ua/UA
+
