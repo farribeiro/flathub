@@ -1,0 +1,22 @@
+From 36e68d8b7a8bef2286c867c694203976c13967ca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?F=C3=A1bio=20Rodrigues=20Ribeiro?= <farribeiro@gmail.com>
+Date: Wed, 11 Jan 2023 10:53:08 -0300
+Subject: [PATCH] Update Makefile
+
+---
+ src/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index f0fa15b..b5981bb 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -6,7 +6,7 @@ OBJDIR := obj
+ 
+ nix: CXX = g++
+ nix: CC = gcc
+-nix: LIBS = -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_net -lGL -lopenal -lvorbisfile -lavformat -lavcodec -lavutil -lswscale -lswresample -llua
++nix: LIBS = -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_net -lGL -lopenal -lvorbisfile -lavformat -lavcodec -lavutil -lswscale -lswresample /app/lib/liblua.so
+ 
+ win32: MINGW = /usr/i686-w64-mingw32
+ win32: CXX = i686-w64-mingw32-g++

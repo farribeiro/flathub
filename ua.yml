@@ -20,9 +20,9 @@ add-extensions:
     no-autodownload: true
     autodelete: false
 
-#cleanup:
-  #- *.a
-  #- *.la
+cleanup:
+  - '*.a'
+  - '*.la'
 
 finish-args:
   - --socket=pulseaudio
@@ -52,10 +52,9 @@ modules:
         #CFLAGS: -I/app/include/
     buildsystem: simple
     build-commands:
-      #- cd src; make nix
-      - install -Dm744 UA /app
-      - install -Dm744 ua-wrapper /app/bin
-      #- fc-cache -fsv ||:;
+      - cd src; make nix
+      - install -Dm755 src/UA_source /app/bin
+      - install -Dm755 ua-wrapper /app/
     sources:
       - type: git
         url: https://github.com/MrWexor/OpenAssault.git
@@ -66,7 +65,7 @@ modules:
       - type: script
         dest-filename: ua-wrapper
         commands:
+          - ln -s /app/bin/UA_source ~/ua/UA
           - cd ~/ua/ua
-          - ln -s /app/UA ~/ua/ua/UA
-          - exec ~/ua/ua/UA
+          - exec ~/ua/UA
 
