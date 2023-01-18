@@ -1,0 +1,45 @@
+---
+app-id: sh.tabby.tabby
+base: org.electronjs.Electron2.BaseApp
+base-version: '22.08'
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+command: tabby-wrapper
+rename-icon: tabby
+rename-desktop-file: tabby.desktop
+separate-locales: false
+finish-args:
+- "--share=ipc"
+- "--socket=fallback-x11"
+- "--socket=system-bus"
+- "--device=dri"
+- "--filesystem=home:ro"
+- "--talk-name=org.freedesktop.Flatpak"
+
+modules:
+- name: tabby
+  buildsystem: simple
+  build-commands:
+  - ar x tabby.deb
+  - tar -xf data.tar.xz
+  - cp -r usr/* /app
+  - cp -r opt/* /app
+  - install -m755 tabby-wrapper /app/bin
+  - install -Dm 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml
+  post-install:
+  - desktop-file-edit --set-key=Version --set-value=1.0 --set-key=Exec --set-value=tabby-wrapper
+    /app/share/applications/tabby.desktop
+  cleanup:
+  - "/share/doc"
+  sources:
+  - type: file
+    url: https://github.com/Eugeny/tabby/releases/download/v1.0.188/tabby-1.0.188-linux-x64.deb
+    sha256: c1cad23fea7084c4bbbcb9c812a744606e5fbfb26c3febc22ccd41300d1a9213
+    dest-filename: tabby.deb
+  - type: file
+    path: sh.tabby.tabby.appdata.xml
+  - type: script
+    dest-filename: tabby-wrapper
+    commands:
+    - exec zypak-wrapper /app/Tabby/tabby "$@"
