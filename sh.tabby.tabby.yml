@@ -27,7 +27,6 @@ modules:
   - cp -r opt/* /app
   - install -m755 tabby-wrapper /app/bin
   - install -Dm 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml
-  post-install:
   - desktop-file-edit --set-key=Version --set-value=1.0 --set-key=Exec --set-value=tabby-wrapper
     /app/share/applications/tabby.desktop
   cleanup:
