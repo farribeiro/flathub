@@ -1,9 +1,9 @@
 ---
 app-id: sh.tabby.tabby
-base: org.electronjs.Electron2.BaseApp
-base-version: '22.08'
 runtime: org.freedesktop.Platform
-runtime-version: '22.08'
+runtime-version: &runtime-version "22.08"
+base: org.electronjs.Electron2.BaseApp
+base-version: *runtime-version
 sdk: org.freedesktop.Sdk
 command: tabby-wrapper
 rename-icon: tabby
